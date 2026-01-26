@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Link Hub Generator - Complete System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for theme management */
+        :root {
+            --primary-bg: #000000;
+            --text-color: #ffffff;
+            --accent-color: #00ff00;
+            --card-bg: #111111;
+            --border-color: #333333;
+            --hover-color: #0a0a0a;
+            --secondary-text: #cccccc;
+            --success-color: #00cc00;
+            --warning-color: #ffcc00;
+            --error-color: #ff3333;
+            --shadow: 0 4px 12px rgba(0, 255, 0, 0.1);
+            --transition: all 0.3s ease;
+            --healthy-color: #00ff00;
+            --average-color: #ffcc00;
+            --poor-color: #ff3333;
+            --login-btn-bg: #00cc00;
+            --login-btn-hover: #00ff00;
+            --user-btn-bg: #4d88ff;
+            --creator-btn-bg: #ff9900;
+            --signup-btn-bg: #00aa00;
+            --signup-btn-hover: #00dd00;
+            --light-green: #33cc33;
+            --medium-green: #009900;
+            --dark-green: #006600;
+        }
+
+        /* Light mode theme - applied based on time */
+        .light-mode {
+            --primary-bg: #f8f9fa;
+            --text-color: #333333;
+            --accent-color: #007a00;
+            --card-bg: #ffffff;
+            --border-color: #dddddd;
+            --hover-color: #f0f0f0;
+            --secondary-text: #666666;
+            --success-color: #008800;
+            --warning-color: #cc9900;
+            --error-color: #cc0000;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --healthy-color: #008800;
+            --average-color: #cc9900;
+            --poor-color: #cc0000;
+            --login-btn-bg: #007a00;
+            --login-btn-hover: #009900;
+            --user-btn-bg: #2d5aff;
+            --creator-btn-bg: #cc6600;
+            --signup-btn-bg: #006600;
+            --signup-btn-hover: #008800;
+            --light-green: #33aa33;
+            --medium-green: #007700;
+            --dark-green: #005500;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--accent-color);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            color: var(--accent-color);
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+        }
+
+        /* Login Buttons (Hidden in header) */
+        .login-buttons {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 60px 0 40px 0;
+            animation: fadeIn 1s ease;
+        }
+
+        .hero-section h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            line-height: 1.2;
+        }
+
+        .hero-section p {
+            font-size: 20px;
+            color: var(--secondary-text);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            padding: 16px 35px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .hero-btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #00cc00);
+            color: var(--primary-bg);
+        }
+
+        .hero-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 255, 0, 0.3);
+        }
+
+        .hero-btn-secondary {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .hero-btn-secondary:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0, 255, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-color), #00cc00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--primary-bg);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+
+        .feature-card p {
+            color: var(--secondary-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .feature-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover {
+            gap: 12px;
+        }
+
+        /* Module Navigation */
+        .module-nav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .module-tab {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .module-tab:hover {
+            border-color: var(--accent-color);
+        }
+
+        .module-tab.active {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+            border-color: var(--accent-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .module-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .module-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title i {
+            color: var(--accent-color);
+        }
+
+        .section-title h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        /* Hub Preview */
+        .hub-preview {
+            background-color: var(--hover-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px dashed var(--border-color);
+            text-align: center;
+        }
+
+        .hub-url {
+            background-color: var(--primary-bg);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 18px;
+            margin: 15px 0;
+            word-break: break-all;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary-text);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(0, 255, 0, 0.1);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0 25px 0;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .footer-links a {
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-login-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-login-links h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .footer-login-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-login-link:hover {
+            color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .copyright {
+            color: var(--secondary-text);
+            font-size: 14px;
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .login-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .login-btn {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .hero-section h2 {
+                font-size: 32px;
+            }
+            
+            .hero-section p {
+                font-size: 18px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .module-nav {
+                justify-content: center;
+            }
+            
+            .module-tab {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+
+        /* Time-based theme indicator */
+        .time-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: var(--secondary-text);
+            margin-top: 5px;
+        }
+
+        /* Quick Login Section */
+        .quick-login-section {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.05) 0%, rgba(0, 204, 0, 0.02) 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+            border: 2px dashed var(--accent-color);
+        }
+
+        .quick-login-section h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .quick-login-section p {
+            color: var(--secondary-text);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quick-login-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quick-login-btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            min-width: 200px;
+            justify-content: center;
+            color: white;
+        }
+
+        .quick-login-btn.signup {
+            background-color: var(--dark-green);
+            box-shadow: 0 4px 12px rgba(0, 102, 0, 0.3);
+        }
+
+        .quick-login-btn.signup:hover {
+            background-color: var(--medium-green);
+            box-shadow: 0 6px 20px rgba(0, 102, 0, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .quick-login-btn.user {
+            background-color: var(--medium-green);
+            box-shadow: 0 4px 12px rgba(0, 153, 0, 0.3);
+        }
+
+        .quick-login-btn.user:hover {
+            background-color: var(--light-green);
+            box-shadow: 0 6px 20px rgba(0, 153, 0, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .quick-login-btn.creator {
+            background-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+        }
+
+        .quick-login-btn.creator:hover {
+            background-color: #33ff33;
+            box-shadow: 0 6px 20px rgba(0, 255, 0, 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* Two Column Layout */
+        .two-column-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .two-column-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Rule Cards */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .rule-card {
+            background-color: var(--hover-color);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .rule-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .rule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rule-header h4 {
+            color: var(--accent-color);
+        }
+
+        .rule-type-badge {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Priority Breakdown */
+        .priority-breakdown {
+            background-color: var(--hover-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .breakdown-item {
+            margin-bottom: 20px;
+        }
+
+        .breakdown-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .breakdown-bar {
+            height: 8px;
+            background-color: var(--primary-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .breakdown-fill {
+            height: 100%;
+            background-color: var(--warning-color);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <h1>Smart<span>Link</span>Hub</h1>
+                <small style="margin-left: 10px; color: var(--accent-color);">v2.0</small>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Switch to Light Mode</span>
+                </button>
+                <div class="login-buttons">
+                    <!-- Buttons removed from header as requested -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <section class="hero-section">
+            <h2>Intelligent Link Management Platform</h2>
+            <p>Create smart link hubs that dynamically adapt to users, context, and performance. Perfect for creators, educators, freelancers, startups, and small organizations.</p>
+            
+            <div class="hero-buttons">
+                <a href="#quick-login" class="hero-btn hero-btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    <span>Get Started Now</span>
+                </a>
+                <a href="#features" class="hero-btn hero-btn-secondary">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Explore Features</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Quick Login Section -->
+    <div class="container" id="quick-login">
+        <section class="quick-login-section">
+            <h3>Start Your Journey</h3>
+            <p>Choose your role to access the Smart Link Hub platform. Each role provides specialized features tailored to your needs.</p>
+            
+            <div class="quick-login-buttons">
+                <a href="signup.html" class="quick-login-btn signup">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Sign Up Free</span>
+                </a>
+                <a href="userlogin.html" class="quick-login-btn user">
+                    <i class="fas fa-user"></i>
+                    <span>Login as User</span>
+                </a>
+                <a href="creatorlogin.html" class="quick-login-btn creator">
+                    <i class="fas fa-wrench"></i>
+                    <span>Login as Creator</span>
+                </a>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 14px; color: var(--secondary-text);">
+                <i class="fas fa-info-circle"></i> New users sign up • Existing users login • Creators build smart link hubs
+            </p>
+        </section>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container" id="features">
+        <h2 style="text-align: center; font-size: 36px; margin-bottom: 40px; color: var(--accent-color);">Platform Features</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Smart Link Hubs</h3>
+                <p>Create single URLs that host multiple links with intelligent routing based on user-defined logic and contextual parameters.</p>
+                <a href="#module1" class="feature-link">
+                    <span>Learn More</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3>Rule Engine</h3>
+                <p>Dynamic link display based on time, device, location, and performance. No-code rule configuration with real-time evaluation.</p>
+                <a href="#module2" class="feature-link">
+                    <span>Learn More</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>Advanced Analytics</h3>
+                <p>Track hub visits, link clicks, performance patterns, and device distribution with comprehensive visualization tools.</p>
+                <a href="#module4" class="feature-link">
+                    <span>Learn More</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Navigation -->
+    <div class="container">
+        <div class="module-nav">
+            <div class="module-tab active" data-module="module1">
+                <i class="fas fa-plus-circle"></i>
+                <span>Module 1: Link Hub</span>
+            </div>
+            <div class="module-tab" data-module="module2">
+                <i class="fas fa-cogs"></i>
+                <span>Module 2: Rule Engine</span>
+            </div>
+            <div class="module-tab" data-module="module3">
+                <i class="fas fa-sort-amount-up"></i>
+                <span>Module 3: Priority Engine</span>
+            </div>
+            <div class="module-tab" data-module="module4">
+                <i class="fas fa-chart-bar"></i>
+                <span>Module 4: Analytics Engine</span>
+            </div>
+            <div class="module-tab" data-module="module5">
+                <i class="fas fa-heartbeat"></i>
+                <span>Module 5: Health Scoring</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- MODULE 1: Link Hub Creation -->
+            <div id="module1" class="module-section active">
+                <div class="dashboard-section">
+                    <div class="section-title">
+                        <i class="fas fa-plus-circle"></i>
+                        <h2>Module 1: Smart Link Hub Creation</h2>
+                    </div>
+                    
+                    <div class="two-column-layout">
+                        <div>
+                            <h3 style="margin-bottom: 15px; color: var(--accent-color);">Create Intelligent Link Collections</h3>
+                            <p style="color: var(--secondary-text); margin-bottom: 20px; line-height: 1.6;">
+                                Generate a single public URL that hosts multiple user-defined links. Perfect for portfolios, documents, videos, products, and social profiles.
+                            </p>
+                            
+                            <div class="feature-list">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <i class="fas fa-check-circle" style="color: var(--accent-color);"></i>
+                                    <span>Add, edit, delete, and reorder multiple links</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <i class="fas fa-check-circle" style="color: var(--accent-color);"></i>
+                                    <span>Unique public URL for each hub</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <i class="fas fa-check-circle" style="color: var(--accent-color);"></i>
+                                    <span>Customizable titles, descriptions, and themes</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <a href="#quick-login" class="btn" style="width: 100%;">
+                                    <i class="fas fa-play"></i>
+                                    <span>Get Started Now</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="hub-preview">
+                                <p style="color: var(--accent-color); font-weight: 600;">Example Smart Link Hub</p>
+                                <div class="hub-url">https://smartlinkhub.com/john-doe-portfolio</div>
+                                <div style="margin-top: 20px; text-align: left;">
+                                    <p style="color: var(--secondary-text); font-size: 14px;">
+                                        <i class="fas fa-lightbulb" style="color: var(--accent-color);"></i>
+                                        This single URL can contain all your important links, dynamically shown based on who's viewing and when.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 2: Rule Engine -->
+            <div id="module2" class="module-section">
+                <div class="dashboard-section">
+                    <div class="section-title">
+                        <i class="fas fa-cogs"></i>
+                        <h2>Module 2: Intelligent Rule Engine</h2>
+                    </div>
+                    
+                    <p style="margin-bottom: 20px; color: var(--secondary-text);">
+                        Configure rules to dynamically control link display based on context. Rules are evaluated in real-time when visitors access your hub.
+                    </p>
+                    
+                    <div class="two-column-layout">
+                        <div>
+                            <h3 style="margin-bottom: 15px; color: var(--accent-color);">Rule Types</h3>
+                            <div class="rules-grid">
+                                <div class="rule-card">
+                                    <div class="rule-header">
+                                        <h4>Time-based Rules</h4>
+                                        <span class="rule-type-badge">Time</span>
+                                    </div>
+                                    <div class="rule-details">
+                                        <p>Show specific links during working hours or scheduled times</p>
+                                        <p style="font-size: 12px; color: var(--accent-color); margin-top: 10px;">
+                                            <i class="fas fa-clock"></i> Example: Show resume 9AM–6PM
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="rule-card">
+                                    <div class="rule-header">
+                                        <h4>Device-based Rules</h4>
+                                        <span class="rule-type-badge">Device</span>
+                                    </div>
+                                    <div class="rule-details">
+                                        <p>Show different links for mobile vs desktop users</p>
+                                        <p style="font-size: 12px; color: var(--accent-color); margin-top: 10px;">
+                                            <i class="fas fa-mobile-alt"></i> Example: Mobile → WhatsApp link
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 15px; color: var(--accent-color);">How It Works</h3>
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                                    <div class="flow-step">
+                                        <div class="flow-icon" style="background-color: var(--accent-color); color: var(--primary-bg); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <p>Visitor accesses hub</p>
+                                    </div>
+                                    
+                                    <div style="font-size: 24px; color: var(--accent-color);">↓</div>
+                                    
+                                    <div class="flow-step">
+                                        <div class="flow-icon" style="background-color: var(--accent-color); color: var(--primary-bg); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                            <i class="fas fa-cogs"></i>
+                                        </div>
+                                        <p>Rules evaluated in real-time</p>
+                                    </div>
+                                    
+                                    <div style="font-size: 24px; color: var(--accent-color);">↓</div>
+                                    
+                                    <div class="flow-step">
+                                        <div class="flow-icon" style="background-color: var(--accent-color); color: var(--primary-bg); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                            <i class="fas fa-rocket"></i>
+                                        </div>
+                                        <p>Personalized links displayed</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <a href="#quick-login" class="btn" style="width: 100%;">
+                                    <i class="fas fa-sliders-h"></i>
+                                    <span>Get Started to Configure Rules</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 3: Priority Engine -->
+            <div id="module3" class="module-section">
+                <div class="dashboard-section">
+                    <div class="section-title">
+                        <i class="fas fa-sort-amount-up"></i>
+                        <h2>Module 3: Smart Priority Engine</h2>
+                    </div>
+                    
+                    <p style="margin-bottom: 20px; color: var(--secondary-text);">
+                        Automatically ranks links using analytics + rules. Final Score = Base Priority + Rule Boost + Performance Boost
+                    </p>
+                    
+                    <div class="two-column-layout">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: var(--accent-color);">Priority Calculation</h3>
+                            <div class="priority-breakdown">
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <span>Base Priority</span>
+                                        <span>50</span>
+                                    </div>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <span>Rule Boost</span>
+                                        <span>+20</span>
+                                    </div>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill" style="width: 70%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <span>Performance Boost</span>
+                                        <span>+15</span>
+                                    </div>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill" style="width: 85%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="breakdown-item">
+                                    <div class="breakdown-label">
+                                        <span style="font-weight: 600; color: var(--accent-color);">Final Score</span>
+                                        <span style="font-weight: 600; color: var(--accent-color);">85</span>
+                                    </div>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill" style="width: 85%; background-color: var(--accent-color);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: var(--accent-color);">Benefits</h3>
+                            <div style="background-color: var(--hover-color); border-radius: 8px; padding: 20px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <i class="fas fa-star" style="color: var(--accent-color);"></i>
+                                    <span>Automatically highlights your best-performing links</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <i class="fas fa-bolt" style="color: var(--accent-color);"></i>
+                                    <span>Real-time adjustments based on visitor behavior</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-chart-line" style="color: var(--accent-color);"></i>
+                                    <span>Data-driven optimization for maximum engagement</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <a href="#quick-login" class="btn" style="width: 100%;">
+                                    <i class="fas fa-bolt"></i>
+                                    <span>Get Started to Access Priority Engine</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 4: Analytics Engine -->
+            <div id="module4" class="module-section">
+                <div class="dashboard-section">
+                    <div class="section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        <h2>Module 4: Advanced Analytics Engine</h2>
+                    </div>
+                    
+                    <p style="margin-bottom: 20px; color: var(--secondary-text);">
+                        Comprehensive analytics dashboard to track performance, understand audience behavior, and optimize your link hubs.
+                    </p>
+                    
+                    <div class="two-column-layout">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: var(--accent-color);">Key Metrics</h3>
+                            <div style="background-color: var(--hover-color); border-radius: 8px; padding: 20px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                    <span>Hub Visits</span>
+                                    <span style="color: var(--accent-color); font-weight: 600;">1,247</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                    <span>Total Link Clicks</span>
+                                    <span style="color: var(--accent-color); font-weight: 600;">3,582</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                                    <span>Click-Through Rate</span>
+                                    <span style="color: var(--accent-color); font-weight: 600;">24.7%</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Top Performing Link</span>
+                                    <span style="color: var(--accent-color); font-weight: 600;">Portfolio (42%)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: var(--accent-color);">Audience Insights</h3>
+                            <div style="background-color: var(--hover-color); border-radius: 8px; padding: 20px;">
+                                <div style="margin-bottom: 15px;">
+                                    <p style="color: var(--secondary-text); margin-bottom: 5px;">Device Distribution</p>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="flex: 1; background-color: var(--primary-bg); height: 8px; border-radius: 4px;">
+                                            <div style="width: 65%; height: 100%; background-color: var(--accent-color); border-radius: 4px;"></div>
+                                        </div>
+                                        <span style="font-size: 14px;">65% Mobile</span>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <p style="color: var(--secondary-text); margin-bottom: 5px;">Peak Visit Times</p>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="flex: 1; background-color: var(--primary-bg); height: 8px; border-radius: 4px;">
+                                            <div style="width: 40%; height: 100%; background-color: var(--accent-color); border-radius: 4px;"></div>
+                                        </div>
+                                        <span style="font-size: 14px;">2-5 PM (40%)</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p style="color: var(--secondary-text); margin-bottom: 5px;">Geographic Reach</p>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="flex: 1; background-color: var(--primary-bg); height: 8px; border-radius: 4px;">
+                                            <div style="width: 30%; height: 100%; background-color: var(--accent-color); border-radius: 4px;"></div>
+                                        </div>
+                                        <span style="font-size: 14px;">US (30%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <a href="#quick-login" class="btn" style="width: 100%;">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Get Started for Advanced Analytics</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 5: Health Scoring -->
+            <div id="module5" class="module-section">
+                <div class="dashboard-section">
+                    <div class="section-title">
+                        <i class="fas fa-heartbeat"></i>
+                        <h2>Module 5: Hub Health Scoring System</h2>
+                    </div>
+                    
+                    <p style="margin-bottom: 20px; color: var(--secondary-text);">
+                        Monitor the overall health of your link hub with a comprehensive scoring system that identifies areas for improvement.
+                    </p>
+                    
+                    <div class="two-column-layout">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: var(--accent-color);">Health Score Components</h3>
+                            <div style="background-color: var(--hover-color); border-radius: 8px; padding: 20px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                    <span>Link Performance</span>
+                                    <span style="color: var(--healthy-color); font-weight: 600;">85/100</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                    <span>Rule Effectiveness</span>
+                                    <span style="color: var(--average-color); font-weight: 600;">65/100</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                    <span>Visitor Engagement</span>
+                                    <span style="color: var(--healthy-color); font-weight: 600;">90/100</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Content Freshness</span>
+                                    <span style="color: var(--poor-color); font-weight: 600;">40/100</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 25px;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                                    <div style="width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(var(--healthy-color) 0% 70%, var(--average-color) 70% 85%, var(--poor-color) 85% 100%); display: flex; align-items: center; justify-content: center; position: relative;">
+                                        <div style="width: 80px; height: 80px; background-color: var(--card-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--accent-color);">
+                                            72
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 style="color: var(--accent-color); margin-bottom: 5px;">Overall Health Score</h4>
+                                        <p style="color: var(--secondary-text); font-size: 14px;">Good - Some improvements needed</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: var(--accent-color);">Recommendations</h3>
+                            <div style="background-color: var(--hover-color); border-radius: 8px; padding: 20px;">
+                                <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px;">
+                                    <i class="fas fa-exclamation-triangle" style="color: var(--poor-color); margin-top: 3px;"></i>
+                                    <div>
+                                        <p style="font-weight: 600; color: var(--text-color);">Update outdated content</p>
+                                        <p style="color: var(--secondary-text); font-size: 14px;">Some links haven't been updated in 90+ days</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px;">
+                                    <i class="fas fa-tools" style="color: var(--average-color); margin-top: 3px;"></i>
+                                    <div>
+                                        <p style="font-weight: 600; color: var(--text-color);">Optimize rules for mobile</p>
+                                        <p style="color: var(--secondary-text); font-size: 14px;">65% of visitors use mobile devices</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                    <i class="fas fa-check-circle" style="color: var(--healthy-color); margin-top: 3px;"></i>
+                                    <div>
+                                        <p style="font-weight: 600; color: var(--text-color);">Engagement is excellent</p>
+                                        <p style="color: var(--secondary-text); font-size: 14px;">High click-through rates across all links</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <a href="#quick-login" class="btn" style="width: 100%;">
+                                    <i class="fas fa-heartbeat"></i>
+                                    <span>Get Started for Health Monitoring</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#features">Features</a>
+                    <a href="#quick-login">Get Started</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Documentation</a>
+                    <a href="#">Contact</a>
+                </div>
+                
+                <div class="footer-login-links">
+                    <h4>Quick Links</h4>
+                    <a href="#features" class="footer-login-link">
+                        <i class="fas fa-star"></i>
+                        <span>Platform Features</span>
+                    </a>
+                    <a href="#quick-login" class="footer-login-link">
+                        <i class="fas fa-rocket"></i>
+                        <span>Get Started</span>
+                    </a>
+                    <a href="#" class="footer-login-link">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help & Support</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Smart Link Hub Generator. All rights reserved. | v2.0 | <span id="currentYear"></span></p>
+                <p style="margin-top: 10px; font-size: 12px; color: var(--secondary-text);">
+                    Intelligent link management for creators, educators, and organizations
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            
+            if (body.classList.contains('light-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Switch to Dark Mode</span>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i><span>Switch to Light Mode</span>';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Switch to Dark Mode</span>';
+        }
+        
+        // Module Navigation
+        const moduleTabs = document.querySelectorAll('.module-tab');
+        const moduleSections = document.querySelectorAll('.module-section');
+        
+        moduleTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const moduleId = tab.getAttribute('data-module');
+                
+                // Update active tab
+                moduleTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show active module
+                moduleSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.getElementById(moduleId).classList.add('active');
+            });
+        });
+        
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Auto-switch theme based on time (6am to 6pm = light mode)
+        function updateThemeBasedOnTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            
+            // If between 6am and 6pm, use light mode
+            if (hours >= 6 && hours < 18) {
+                if (!body.classList.contains('light-mode') && !localStorage.getItem('theme')) {
+                    body.classList.add('light-mode');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Switch to Dark Mode</span>';
+                }
+            }
+        }
+        
+        // Check time on load
+        updateThemeBasedOnTime();
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href') === '#') return;
+                
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Add animation to feature cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

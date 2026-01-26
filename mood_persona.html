@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Link Hub | Professional Rule Engine</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #000000;
+            --accent-green: #00ff00;
+            --card-bg: #111111;
+            --text-gray: #cccccc;
+            --border-color: #333333;
+            --healthy: #00ff00;
+            --average: #ffbb33;
+            --poor: #ff4444;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding-bottom: 50px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+        header {
+            background-color: #0a0a0a;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--accent-green);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .status-bar {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .persona-display {
+            background: var(--card-bg);
+            border: 1px solid var(--accent-green);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .persona-icon { font-size: 50px; color: var(--accent-green); margin-bottom: 15px; }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .link-card {
+            background: #161616;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .link-card.top-priority { border: 1px solid var(--accent-green); box-shadow: 0 0 15px rgba(0,255,0,0.1); }
+
+        .health-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .score-🟢 { color: var(--healthy); border: 1px solid var(--healthy); }
+        .score-🟡 { color: var(--average); border: 1px solid var(--average); }
+        .score-🔴 { color: var(--poor); border: 1px solid var(--poor); }
+
+        .link-title { font-size: 18px; color: var(--accent-green); margin-bottom: 10px; }
+        .link-stats { font-size: 12px; color: var(--text-gray); margin-top: 15px; display: flex; gap: 10px; }
+        
+        .mood-tag {
+            background: #222;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--accent-green);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1 style="color: var(--accent-green); margin:0;"><i class="fas fa-rocket"></i>SMART HUB</h1>
+    </div>
+</header>
+
+<main class="container">
+    <div class="status-bar">
+        <div id="timeDisplay"><i class="fas fa-clock"></i> Syncing...</div>
+        <div id="currentMoodDisplay" class="mood-tag">Mood: Detecting...</div>
+    </div>
+
+    <div class="persona-display" id="personaContainer">
+        <div class="persona-icon" id="personaIcon"><i class="fas fa-sync fa-spin"></i></div>
+        <h2 id="personaTitle" style="margin: 10px 0;">Calculating Persona...</h2>
+        <p id="personaDesc" style="color: var(--text-gray);"></p>
+    </div>
+
+    <h3 style="border-left: 4px solid var(--accent-green); padding-left: 15px; margin-bottom: 20px;">
+        DYNAMICALLY SORTED LINKS (By Health Score)
+    </h3>
+
+    <div class="links-grid" id="linksContainer">
+        </div>
+</main>
+
+<script>
+    // 1. DATA MODEL
+    const linksData = [
+        { id: 1, title: "Pro Portfolio", ctr: 85, growth: 20, consistency: 40, mood: 'focused', icon: 'fa-briefcase' },
+        { id: 2, title: "Creative Beats", ctr: 40, growth: 10, consistency: 15, mood: 'creative', icon: 'fa-music' },
+        { id: 3, title: "Community Chat", ctr: 90, growth: 50, consistency: 45, mood: 'social', icon: 'fa-comments' },
+        { id: 4, title: "Night Meditation", ctr: 20, growth: 5, consistency: 10, mood: 'relaxed', icon: 'fa-moon' },
+        { id: 5, title: "Daily Tasks", ctr: 60, growth: 15, consistency: 30, mood: 'productive', icon: 'fa-check-double' }
+    ];
+
+    const personas = {
+        focused: { title: "Deep Work Mode", icon: "fa-brain", desc: "System time indicates peak productivity hours." },
+        creative: { title: "Inspiration Hour", icon: "fa-lightbulb", desc: "The evening sparks innovation and creative links." },
+        relaxed: { title: "Wind Down Persona", icon: "fa-couch", desc: "Late hours detected. Prioritizing wellness and rest." },
+        productive: { title: "Morning Sprint", icon: "fa-bolt", desc: "Start of the day! Prioritizing planning and toolkits." },
+        social: { title: "Community Connect", icon: "fa-users", desc: "Ideal time for social engagement and networking." }
+    };
+
+    // 2. CORE LOGIC: HEALTH SCORE & MOOD MAPPING
+    function calculateHealth(link) {
+        // Formula from PDF: CTR + Recent Growth + Engagement Consistency
+        return link.ctr + link.growth + link.consistency;
+    }
+
+    function getHealthStatus(score) {
+        if (score >= 120) return { label: "Healthy", icon: "🟢" };
+        if (score >= 70) return { label: "Average", icon: "🟡" };
+        return { label: "Poor", icon: "🔴" };
+    }
+
+    function getMoodByTime(hour) {
+        if (hour >= 5 && hour < 10) return 'productive';
+        if (hour >= 10 && hour < 17) return 'focused';
+        if (hour >= 17 && hour < 21) return 'creative';
+        if (hour >= 21 || hour < 5) return 'relaxed';
+        return 'social';
+    }
+
+    // 3. UI RENDERING
+    function updateDashboard() {
+        const now = new Date();
+        const hour = now.getHours();
+        const mood = getMoodByTime(hour);
+        const persona = personas[mood];
+
+        // Update Header
+        document.getElementById('timeDisplay').innerHTML = `<i class="fas fa-sync"></i> System Time: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+        document.getElementById('currentMoodDisplay').textContent = `Mood: ${mood.toUpperCase()}`;
+        
+        // Update Persona
+        document.getElementById('personaIcon').innerHTML = `<i class="fas ${persona.icon}"></i>`;
+        document.getElementById('personaTitle').textContent = persona.title;
+        document.getElementById('personaDesc').textContent = persona.desc;
+
+        // Sort by Health Score (Rule Engine)
+        const sortedLinks = [...linksData].sort((a, b) => calculateHealth(b) - calculateHealth(a));
+
+        const container = document.getElementById('linksContainer');
+        container.innerHTML = '';
+
+        sortedLinks.forEach((link, index) => {
+            const score = calculateHealth(link);
+            const health = getHealthStatus(score);
+            
+            const card = document.createElement('div');
+            card.className = `link-card ${index === 0 ? 'top-priority' : ''}`;
+            card.innerHTML = `
+                <div class="health-badge score-${health.icon}">${health.icon} ${health.label}</div>
+                <div class="link-title"><i class="fas ${link.icon}"></i> ${link.title}</div>
+                <div style="font-size: 13px; color: #888;">Optimized for ${link.mood} mood</div>
+                <div class="link-stats">
+                    <span><i class="fas fa-chart-line"></i> Score: ${score}</span>
+                    <span><i class="fas fa-mouse-pointer"></i> CTR: ${link.ctr}%</span>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Auto-refresh every minute
+    updateDashboard();
+    setInterval(updateDashboard, 60000);
+</script>
+
+</body>
+</html>
